@@ -1,5 +1,5 @@
 # runPacer
-Bash script containing sox commands to add a 180BPM beat to soundfiles 
+Bash script containing SoX commands to add a 180BPM beat to sound files 
 
 # requires
 SoX with mp3 extension and id3v2 (or comment out lines 44 and 45)

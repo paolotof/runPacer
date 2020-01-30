@@ -17,23 +17,23 @@
 
 myfiles=(*.*)
 counter=1
-echo ${iWord}
-for iWord in "${myfiles[@]}"; do
-	if (( `expr "${iWord}" : '.*\.mp3'` > 0 )); then
-		echo "skipping " "${iWord}";
+for iFile in "${myfiles[@]}"; do
+	echo ${iFile}
+	if (( `expr "${iFile}" : '.*\.mp3'` > 0 )); then
+		echo "skipping " "${iFile}";
 		continue
 	fi
-	if (( `expr "${iWord}" : '.*\.ogg'` > 0 )); then 
+	if (( `expr "${iFile}" : '.*\.ogg'` > 0 )); then 
 		echo "convert ogg to mp3";
-		fileName="${iWord%.ogg}.mp3";
-		sox "${iWord}" "$fileName";
+		fileName="${iFile%.ogg}.mp3";
+		sox "${iFile}" "$fileName";
 	fi
-	if (( `expr "${iWord}" : '.*\.opus'` > 0 )); then 
+	if (( `expr "${iFile}" : '.*\.opus'` > 0 )); then 
 		echo "convert opus to mp3";
-		fileName="${iWord%.opus}.mp3";
-		opusdec --force-wav "${iWord}" - | sox - "$fileName"
+		fileName="${iFile%.opus}.mp3";
+		opusdec --force-wav "${iFile}" - | sox - "$fileName"
 	fi
-	echo ${iWord:0:`expr "$iWord" : '.*\.'`}"mp3"
+	echo ${iFile:0:`expr "$iFile" : '.*\.'`}"mp3"
 	sox "$fileName" "file1.mp3" remix 1
 	sox -n -r `soxi -r file1.mp3` "output.mp3" synth `soxi -d file1.mp3` sine 500 vol 0.5 synth `soxi -d file1.mp3` square amod 3
 	newFile=${fileName%.mp3}_beat.mp3
@@ -44,5 +44,6 @@ for iWord in "${myfiles[@]}"; do
 	id3v2 --TALB "Running cadence" "$newFile";
 	id3v2 --TRCK $counter $newFile;
 	let counter=counter+1
-	echo "${iWord}" "done"
+# 	echo "${iFile}" 
+	echo "done"
 done
